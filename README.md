@@ -1,6 +1,6 @@
-# Project Name
+# Perfect Query
 
-> A project attempting to optimize a server/databse scheme to achieve the following metrics under load:
+> A project attempting to optimize a server/database scheme to achieve the following metrics under load:
     Response Time: <= 2000ms,
     Throughput: > 100 rps on EC2,
     Error rate <= 1%
@@ -18,29 +18,262 @@
 1. [Development](#development)
 
 ## API Endpoints
+<br></br>
+### __Working With Homes__
 
-> GET API/homes/similar/:home_id  -  Primary endpoint. This endpoint would identify which listing was being viewed by its ID in the request parameters. It would then query information on this home (size, price, location) and find 16 similar homes within the database, and return those results in an array in its response body. Each home would be an object containing values for image url, price, address etc.
+__Add A Home__
+* POST api/homes
 
-GET API/homes/nearby/:home_id  -  Other primary endpoint. This endpoint would identify which listing was being viewed by its ID in the request parameters. It would then query information on this home (size, price, location) and find 16 nearby homes within the database, and return those results in an array in its response body. Each home would be an object containing values for image url, price, address etc.
+__Success Status Code:__ 201
 
-GET API/homes/liked/:user_id  -  This route takes a user's id in its request params and returns the homes this user has liked as an array of homes.
+__Responses__
 
-POST API/homes/liked/:home_id/:user_id - Creates a record in the users_listings table that records that the user has liked a home. The user and home are both identified by their respective ids in the request parameters.
+```json
+    {
+      "message": "Successfully added a listing."
+    }
+```
 
-DELETE API/homes/liked/:home_id/:user_id - Deletes a record in the users_listings table. The user and home are both identified by their respective ids in the request parameters.
+```json
+    {
+      "message": "Failed to add a listing."
+    }
+```
 
-POST API/users  -  This endpoint adds a user to the database. The user's information will be sent in the request body and the server will respond with a success or failure to add message.
+__Remove A Home__
+* DELETE api/homes/:id
 
-PATCH API/users/:id - This endpoint would update a user's information. It would take a user's id in the request params and it would take the requested update in the body of the request.
+__Path Parameters__
+* id | Home's ID
 
-DELETE API/users/:id - This endpoint removes the user identified in the request params from the database.
+__Success Status Code:__ 200
 
-POST API/homes  -  This end point would be used for adding a home record to the database. It will take home info such as price, address, image urls etc in the request body.
+__Responses__
 
-PATCH API/homes/:id - This end point would be used for updating homes in the database. A likely use case would be prices being changed to meet market conditions or realtors uploading additional images of the home. This endpoint would take the ID of the home from the request parameters and the requested changes in an object in the request body. It would respond with a success or failure message based on if the database was able to make the requested updates.
+```json
+    {
+      "message": "Successfully removed a listing."
+    }
+```
 
-DELETE API/homes/:id  -  This endpoint would be used for removing homes from the database. A likely use case would be when a home is sold or for whatever other reason removed from the market. It would take the home’s ID from the request params and delete the row in the database holding that id. It would respond with a success or failure based on whether it was able to find and delete the home record.
+```json
+    {
+      "message": "Failed to remove a listing."
+    }
+```
 
+__Update A Home__
+* PATCH api/homes/:id
+
+__Path Parameters__
+* id | Home's ID
+
+__Success Status Code:__ 200
+
+__Responses__
+
+```json
+    {
+      "message": "Successfully updated a listing."
+    }
+```
+
+```json
+    {
+      "message": "Failed to update a listing."
+    }
+```
+
+__Get Similar Homes & Get Nearby Homes__
+* api/homes/similar/:id
+* api/homes/nearby/:id
+
+__Path Parameters__
+* id | Home's ID
+
+__Success Status Code:__ 200
+
+__Response__
+
+Responds with array of 10-20 home objects of shape:
+```json
+    {
+      "id": "Int",
+      "decreased" : "Boolean",
+      "dateListed" : "Date",
+      "imageurl" : "String",
+      "price" : "Int",
+      "beds" : "Int",
+      "baths" : "Int",
+      "sqft" : "Int",
+      "street" : "String",
+      "zipcode" : "Int",
+      "city" : "String",
+      "state_name" : "String",
+      "realtor" : "String",
+    }
+```
+<br></br>
+### __Working With Users__
+
+__Get A User__
+* GET api/users/:id
+
+__Path Parameters__
+* id | User's ID
+
+__Success Status Code:__ 200
+
+__Responses__
+
+```json
+    {
+      "id": "Int",
+      "username": "String",
+      "first_name": "String",
+      "last_name": "String",
+      "email": "String"
+    }
+```
+
+__Add A User__
+* POST api/users
+
+__Success Status Code:__ 201
+
+__Responses__
+
+```json
+    {
+      "message": "Successfully added a User."
+    }
+```
+
+```json
+    {
+      "message": "Failed to add a User."
+    }
+```
+
+__Remove A User__
+* DELETE api/users/:id
+
+__Path Parameters__
+* id | User's ID
+
+__Success Status Code:__ 200
+
+__Responses__
+
+```json
+    {
+      "message": "Successfully removed a user."
+    }
+```
+
+```json
+    {
+      "message": "Failed to remove user."
+    }
+```
+
+__Update A User__
+* PATCH api/homes/:id
+
+__Path Parameters__
+* id | User's ID
+
+__Success Status Code:__ 200
+
+__Responses__
+
+```json
+    {
+      "message": "Successfully updated User."
+    }
+```
+
+```json
+    {
+      "message": "Failed to update User."
+    }
+```
+
+<br></br>
+### __Tracking Which User's Like Which Homes__
+
+__Get A User's Liked Homes__
+* GET api/users/liked/:id
+
+__Path Parameters__
+* id | User's ID
+
+__Success Status Code:__ 200
+
+__Responses__
+
+Responds with array of liked home objects of shape:
+```json
+    {
+      "id": "Int",
+      "decreased" : "Boolean",
+      "dateListed" : "Date",
+      "imageurl" : "String",
+      "price" : "Int",
+      "beds" : "Int",
+      "baths" : "Int",
+      "sqft" : "Int",
+      "street" : "String",
+      "zipcode" : "Int",
+      "city" : "String",
+      "state_name" : "String",
+      "realtor" : "String",
+    }
+```
+
+__Add A Home To A User's Liked List__
+* POST API/homes/liked/:home_id/:user_id
+
+__Path Parameters__
+* home_id | Home's ID
+* user_id | User's ID
+
+__Success Status Code:__ 201
+
+__Responses__
+```json
+    {
+      "message": "Successfully added liked home to user's List."
+    }
+```
+
+```json
+    {
+      "message": "Failed to add liked home to user's list."
+    }
+```
+
+__Remove A Home From A User's Liked List__
+* DELETE API/homes/liked/:home_id/:user_id
+
+__Path Parameters__
+* home_id | Home's ID
+* user_id | User's ID
+
+__Success Status Code:__ 200
+
+__Responses__
+```json
+    {
+      "message": "Successfully removed liked home from user's List."
+    }
+```
+
+```json
+    {
+      "message": "Failed to remove liked home from user's list."
+    }
+```
 
 ## Requirements
 

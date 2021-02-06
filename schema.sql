@@ -31,7 +31,7 @@ CREATE TABLE home_info (
 
 CREATE TABLE users_listings (
   id serial primary key,
-  userID int REFERENCES users (id),
+  users_id int REFERENCES users (id),
   home_id int REFERENCES home_info(id)
 );
 
