@@ -5,7 +5,7 @@ const writeSimilar = fs.createWriteStream('similar.csv');
 writeSimilar.write('base_home_id,similar_home_id\n', 'utf8');
 
 const writeTenMillionSimilar = (writer, encoding, callback) => {
-  let i = 4;
+  let i = 10000000;
 
   const write = async () => {
     let ok = true;
@@ -13,21 +13,21 @@ const writeTenMillionSimilar = (writer, encoding, callback) => {
     while (i > 0 && ok) {
       i -= 1;
 
-      if (i % 200000 === 0) {
+      if (i % 100000 === 0) {
         console.log(`${i} records written`);
       }
       // Base Home Info
-      const baseHomeZipResults = await db.connection.query(`select zipcode from home_info where id = ${i + 1}`);
-      const { zipcode } = baseHomeZipResults.rows[0];
+      const baseHomeZipResults = await db.connection.query(`select zipcode, price, beds from home_info where id = ${i + 1}`);
+      const { zipcode, price, beds } = baseHomeZipResults.rows[0];
 
-      const baseHomePriceResults = await db.connection.query(`select price from home_info where id = ${i + 1}`);
-      const { price } = baseHomePriceResults.rows[0];
+      // const baseHomePriceResults = await db.connection.query(`select price from home_info where id = ${i + 1}`);
+      // const { price } = baseHomePriceResults.rows[0];
 
-      const baseHomeBedsResults = await db.connection.query(`select beds from home_info where id = ${i + 1}`);
-      const { beds } = baseHomeBedsResults.rows[0];
+      // const baseHomeBedsResults = await db.connection.query(`select beds from home_info where id = ${i + 1}`);
+      // const { beds } = baseHomeBedsResults.rows[0];
 
       // Find Similar Homes
-      const similarHomesResults = await db.connection.query(`select id from home_info where id != ${i + 1} and zipcode = ${zipcode} and price < ${price + (price * .3)} and price > ${price - (price * .3)} and beds > ${beds - 2} and beds < ${beds + 2} limit 8`);
+      const similarHomesResults = await db.connection.query(`select id from home_info where zipcode = ${zipcode}and id != ${i + 1} and price < ${price + (price * .3)} and price > ${price - (price * .3)} and beds > ${beds - 2} and beds < ${beds + 2} limit 8`);
       const { rows } = similarHomesResults;
 
       const similarHomes = rows.map((val) => (val.id));
