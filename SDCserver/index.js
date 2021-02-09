@@ -6,7 +6,7 @@ const controllers = require('./SDCcontrollers.js');
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, '../client', 'dist')));
+app.use('/:id', express.static(path.join(__dirname, '../client', 'dist')));
 app.use(cors());
 app.use(express.json());
 

@@ -6,30 +6,30 @@ class ImagePanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      images: props.listing.images,
-      currentImageIndex: 0,
-      lastIndex: (props.listing.images.length - 1),
+      images: props.listing.imageurl,
+      // currentImageIndex: 0,
+      // lastIndex: (props.listing.images.length - 1),
       hovered: false,
       liked: props.listing.liked,
       listingId: props.listing._id,
       isNewListing: props.listing.isNewListing,
       forSaleByOwner: props.listing.forSaleByOwner,
     };
-    this.handleImageClick = this.handleImageClick.bind(this);
+    // this.handleImageClick = this.handleImageClick.bind(this);
     this.likeOrUnlike = this.likeOrUnlike.bind(this);
     this.handleMouseHover = this.handleMouseHover.bind(this);
   }
 
-  handleImageClick() {
-    const { currentImageIndex, lastIndex } = this.state;
-    if (currentImageIndex === lastIndex) {
-      this.setState({ currentImageIndex: 0 });
-    } else {
-      const nextIndex = currentImageIndex + 1;
-      this.setState({ currentImageIndex: nextIndex });
-    }
-    this.render();
-  }
+  // handleImageClick() {
+  //   const { currentImageIndex, lastIndex } = this.state;
+  //   if (currentImageIndex === lastIndex) {
+  //     this.setState({ currentImageIndex: 0 });
+  //   } else {
+  //     const nextIndex = currentImageIndex + 1;
+  //     this.setState({ currentImageIndex: nextIndex });
+  //   }
+  //   this.render();
+  // }
 
   handleMouseHover() {
     const { hovered } = this.state;
@@ -39,17 +39,17 @@ class ImagePanel extends React.Component {
   }
 
   zoomOnHover() {
-    const { images, currentImageIndex, hovered } = this.state;
+    const { images, hovered } = this.state;
     if (hovered) {
       return (
         <img
           className="zoomedImage"
-          src={images[currentImageIndex]}
+          src={images}
           alt="zoomedImage"
         />
       );
     }
-    return <img src={images[currentImageIndex]} alt="img" />;
+    return <img src={images} alt="img" />;
   }
 
   likeOrUnlike() {
@@ -103,7 +103,7 @@ class ImagePanel extends React.Component {
         <div className="imagePanelBox">
           <div
             className="imagePanelContainer"
-            onClick={() => this.handleImageClick()}
+            // onClick={() => this.handleImageClick()}
             onMouseEnter={() => this.handleMouseHover()}
             onMouseLeave={() => this.handleMouseHover()}
           >

@@ -77,9 +77,8 @@ class Carousel extends React.Component {
     // eslint-disable-next-line react/prop-types
     const { listings, like, unlike, city } = this.props;
     const { view } = this.state;
-    const chosenListings = listings.slice(0, 15);
     const translateView = {
-      transform: `translateX(-${(this.stopCarouselFromGoingOver(chosenListings.length)) * 912}px)`,
+      transform: `translateX(-${(this.stopCarouselFromGoingOver(listings.length)) * 912}px)`,
     };
 
     return (
@@ -88,7 +87,7 @@ class Carousel extends React.Component {
           <div className="carouselWindow">
             <ul className="carouselList" style={translateView}>
               {
-                chosenListings.map((listing) => (
+                listings.map((listing) => (
                   <Listing
                     listing={listing}
                     like={like}

@@ -10,7 +10,7 @@
     "react-dev": "webpack -d --watch",
     "start-nodemon": "nodemon server/index.js",
     "start": "node server/index.js",
-    "sdcserver": "node SDCserver/index.js",
+    "sdcserver": "nodemon SDCserver/index.js",
     "seed-database": "node database/seed.js",
     "seed": "node database/seed.js",
     "test": "jest --coverage",
