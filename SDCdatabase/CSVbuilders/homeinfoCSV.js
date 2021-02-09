@@ -23,7 +23,7 @@ const writeHomes = fs.createWriteStream('home_info.csv');
 writeHomes.write('decreased,dateListed,imageUrl,price,beds,baths,sqft,street,zipcode,city,state_name,realtor\n', 'utf8');
 
 const writeTenMillionHomes = (writer, encoding, callback) => {
-  let i = 10000000;
+  let i = 1000000;
 
   const write = () => {
     let ok = true;

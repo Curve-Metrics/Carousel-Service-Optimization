@@ -5,7 +5,7 @@ const writeSimilar = fs.createWriteStream('similar.csv');
 writeSimilar.write('base_home_id,similar_home_id\n', 'utf8');
 
 const writeTenMillionSimilar = (writer, encoding, callback) => {
-  let i = 10000000;
+  let i = 1000000;
 
   const write = async () => {
     let ok = true;

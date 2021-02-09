@@ -49,4 +49,5 @@ CREATE TABLE nearby_relationships (
 );
 
 CREATE INDEX zipcode_similar_idx ON home_info (zipcode) INCLUDE (price, beds);
+CREATE INDEX basehome_similar_idx ON similar_relationships (base_home_id) INCLUDE (similar_home_id);
 CREATE INDEX zipcode_new_idx ON home_info (zipcode) INCLUDE (dateListed);
