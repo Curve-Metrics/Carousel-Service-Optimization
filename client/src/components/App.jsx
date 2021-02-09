@@ -7,8 +7,10 @@ import CarouselStyleWrapper from './CarouselStyleWrapper.jsx';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    const { id } = props;
     this.state = {
       headline: 'Similar Homes You May Like',
+      homeId: id,
       listings: [],
       city: null,
     };
@@ -20,14 +22,15 @@ class App extends React.Component {
   }
 
   getListings() {
+    const { homeId } = this.state;
     ajax({
-      url: '/api/listings',
+      url: `/api/homes/similar/${homeId}`,
       method: 'GET',
       dataType: 'json',
       success: (response) => {
         this.setState({
-          listings: response,
-          city: response[0].city,
+          listings: response.rows,
+          city: response.rows[0].city,
         });
         this.render();
       },

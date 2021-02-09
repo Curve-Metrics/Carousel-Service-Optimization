@@ -2,6 +2,10 @@
 .eslintrc.js
 coverage
 
+newrelic.js
+k6script.js
+newrelic_agent.log
+
 client/dist/bundle.js
 node_modules
 
