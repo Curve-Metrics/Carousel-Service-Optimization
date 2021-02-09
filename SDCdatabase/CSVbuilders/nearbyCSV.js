@@ -17,23 +17,17 @@ const writeTenMillionNearby = (writer, encoding, callback) => {
         console.log(`${i} records written`);
       }
       // Base Home Info
-      const baseHomeZipResults = await db.connection.query(`select zipcode, price, beds from home_info where id = ${i + 1}`);
-      const { zipcode, price, beds } = baseHomeZipResults.rows[0];
-
-      // const baseHomePriceResults = await db.connection.query(`select price from home_info where id = ${i + 1}`);
-      // const { price } = baseHomePriceResults.rows[0];
-
-      // const baseHomeBedsResults = await db.connection.query(`select beds from home_info where id = ${i + 1}`);
-      // const { beds } = baseHomeBedsResults.rows[0];
+      const baseHomeZipResults = await db.connection.query(`select zipcode from home_info where id = ${i + 1}`);
+      const { zipcode } = baseHomeZipResults.rows[0];
 
       // Find Nearby Homes
-      const similarHomesResults = await db.connection.query(`select id from home_info where zipcode = ${zipcode}and id != ${i + 1} and price < ${price + (price * .3)} and price > ${price - (price * .3)} and beds > ${beds - 2} and beds < ${beds + 2} limit 8`);
-      const { rows } = similarHomesResults;
+      const nearbyHomesResults = await db.connection.query(`select id from home_info where zipcode = ${zipcode} and id != ${i + 1} and  limit 8`);
+      const { rows } = nearbyHomesResults;
 
-      const similarHomes = rows.map((val) => (val.id));
+      const nearbyHomes = rows.map((val) => (val.id));
 
-      for (let j = 0; j < similarHomes.length; j += 1) {
-        const data = `${i + 1},${similarHomes[j]}\n`;
+      for (let j = 0; j < nearbyHomes.length; j += 1) {
+        const data = `${i + 1},${nearbyHomes[j]}\n`;
         if (i === 0) {
           writer.write(data, encoding, callback);
         } else {
